@@ -30,6 +30,23 @@ router.post("/create", async (req, res) => {
     console.error("Error creating meeting:", error);
     res.status(500).json({ message: "Failed to create meeting", error: error.message });
   }
+  app.post("/api/rooms", (req, res) => {
+    const { roomId } = req.body;
+    if (!roomId) {
+      return res.status(400).json({ error: "Room ID is required" });
+    }
+    res.status(201).json({ message: "Room created", roomId });
+  });
+  
+  app.get("/api/rooms/:roomId/participants", (req, res) => {
+    const roomId = req.params.roomId;
+    if (participants[roomId]) {
+      res.status(200).json(participants[roomId]);
+    } else {
+      res.status(404).json({ message: "Room not found or has no participants." });
+    }
+  });
+  
 });
 
 module.exports = router;
